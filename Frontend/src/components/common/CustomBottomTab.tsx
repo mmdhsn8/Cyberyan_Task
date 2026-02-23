@@ -89,6 +89,7 @@ export const CustomBottomTab: React.FC<CustomBottomTabProps> = ({
     ], { stopTogether: false });
 
     animationRef.current.start(({ finished }) => {
+      // Ignore completion callbacks from canceled/outdated animations.
       if (animationToken !== animationTokenRef.current || !finished) return;
       onEnd?.();
     });
@@ -98,6 +99,7 @@ export const CustomBottomTab: React.FC<CustomBottomTabProps> = ({
     const activeIndex = tabs.findIndex(tab => tab === activeTab);
     if (activeIndex === -1 || tabWidth <= 0) return;
 
+    // Skip duplicate runs while a press-triggered animation for the same tab is still in flight.
     if (requestedTabRef.current === activeTab && isAnimatingRef.current) {
       return;
     }

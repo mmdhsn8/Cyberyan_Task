@@ -37,6 +37,7 @@ const identityReducer = (
       return {
         ...state,
         passportImageUri: action.payload,
+        // Any source image change invalidates previously issued identity artifacts.
         did: null,
         vc: null,
         auditTrail: [],
@@ -47,6 +48,7 @@ const identityReducer = (
       return {
         ...state,
         selfieImageUri: action.payload,
+        // Any source image change invalidates previously issued identity artifacts.
         did: null,
         vc: null,
         auditTrail: [],

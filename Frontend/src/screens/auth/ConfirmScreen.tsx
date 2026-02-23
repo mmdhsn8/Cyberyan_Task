@@ -97,6 +97,7 @@ export const ConfirmScreen: React.FC<Props> = ({ navigation }) => {
         selfieImage: selfieImageUri,
       });
       const authResponse = await loginUser(user.email);
+      // Audit endpoint requires a valid auth token issued after login.
       const auditRecord = await fetchIssuanceAuditRecord(
         identityResponse.did,
         identityResponse.vc,
@@ -454,5 +455,4 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
 });
-
 

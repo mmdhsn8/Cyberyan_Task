@@ -31,6 +31,7 @@ const buildHostCandidates = (): string[] => {
       ? ['10.0.2.2', '10.0.3.2', 'localhost', '127.0.0.1']
       : ['localhost', '127.0.0.1'];
 
+  // Try Metro host first so physical devices and LAN dev setups work without manual config.
   const candidates = [extractMetroHost(), ...platformFallbacks].filter(
     (host): host is string => Boolean(host && host.trim()),
   );
@@ -84,6 +85,7 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
+    // Network-only failures retry on the next host candidate before surfacing the error.
     retriableConfig.__retryIndex = retryIndex + 1;
     retriableConfig.baseURL = toBaseUrl(
       retryHosts[retriableConfig.__retryIndex] ?? DEFAULT_HOST,

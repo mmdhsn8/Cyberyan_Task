@@ -42,6 +42,7 @@ export const RootNavigator: React.FC = () => {
       return;
     }
 
+    // Reset avoids back-navigation into a stale auth/app flow after state changes.
     navigationRef.reset({
       index: 0,
       routes: [{ name: targetRouteName }],

@@ -49,7 +49,6 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
     }
 
     await setProfile({ name: trimmedName, email: trimmedEmail });
-    console.log('good luck');
     navigation.navigate('PassportUpload');
   };
 
