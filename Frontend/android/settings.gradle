@@ -1,0 +1,29 @@
+pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
+plugins { id("com.facebook.react.settings") }
+
+def generatedAutolinkingDir = file("$rootDir/build/generated/autolinking")
+def generatedAutolinkingJson = file("$generatedAutolinkingDir/autolinking.json")
+if (generatedAutolinkingJson.exists()) {
+    def expectedRoot = file("..").canonicalPath
+    try {
+        def parsed =
+            new groovy.json.JsonSlurper().parseText(generatedAutolinkingJson.getText("UTF-8"))
+        def cachedRoot = (parsed?.root ?: "").toString()
+
+        // If this project folder was moved/copied, invalidate stale autolinking cache paths.
+        if (!cachedRoot.equalsIgnoreCase(expectedRoot)) {
+            generatedAutolinkingJson.delete()
+            ["package-lock.json.sha", "package.json.sha", "yarn.lock.sha", "react-native.config.js.sha"]
+                .each { sha -> file("$generatedAutolinkingDir/$sha").delete() }
+        }
+    } catch (Exception ignored) {
+        generatedAutolinkingJson.delete()
+    }
+}
+
+extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
+    ex.autolinkLibrariesFromCommand()
+}
+rootProject.name = 'cy0task'
+include ':app'
+includeBuild('../node_modules/@react-native/gradle-plugin')
